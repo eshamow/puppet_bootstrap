@@ -1,0 +1,11 @@
+---
+
+  - git: repo=https://github.com/eshamow/control.git
+         dest=/etc/puppet/control
+  - command: 'git checkout --track origin/puppet'
+    args:
+      chdir: /etc/puppet/control
+  - command: '/usr/local/bin/r10k deploy environment -pv'
+    args:
+      chdir: /etc/puppet/control
+  - command: 'puppet apply --modulepath /etc/puppet/environments/puppet/modules --verbose -e "class {''puppetmaster'': master => {{ ansible_hostname }}, control_repo => ''https://github.com/eshamow/control.git'' }"'

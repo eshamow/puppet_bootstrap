@@ -1,0 +1,4 @@
+---
+
+  - name: install git on Debian
+    apt: name=git state=installed

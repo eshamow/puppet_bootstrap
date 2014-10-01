@@ -1,0 +1,4 @@
+---
+
+  - name: install git on el
+    yum: name=git state=installed

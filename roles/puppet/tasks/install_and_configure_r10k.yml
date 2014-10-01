@@ -1,0 +1,12 @@
+---
+
+  - name: install zack-r10k module
+    command: puppet module install zack-r10k
+
+  - name: install rubygems where it is not automatically
+    command: puppet apply -v -e 'include ruby'
+    when: ansible_os_family == 'Debian'
+
+  - command: gem install r10k
+
+  - command: 'puppet apply --verbose -e ''class { "r10k": version => "installed", sources => { "puppet" => { "remote" => "https://github.com/eshamow/control.git", "basedir" => "/etc/puppet/environments", "prefix" => false, } }, purgedirs => ["/etc/puppet/environments"], install_options => "-debug", manage_modulepath => false, manage_ruby_dependency => ignore, }'''

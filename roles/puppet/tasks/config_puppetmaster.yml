@@ -1,0 +1,10 @@
+---
+
+  - command: puppet config set server {{ ansible_hostname }} --section main
+  - command: puppet config set certname {{ ansible_hostname }} --section main
+  - command: puppet config set dns_alt_names {{ ansible_hostname }} --section main
+  - command: puppet config set environment puppet --section main
+  - command: puppet master --verbose
+  - command: sleep 10
+  - command: puppet agent -t
+  - command: pkill -f 'puppet master --verbose'
