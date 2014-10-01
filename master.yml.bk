@@ -1,0 +1,66 @@
+---
+
+- hosts: masters
+  sudo: yes
+  tasks:
+  - name: fetch puppetlabs el rpm
+    get_url: url=http://yum.puppetlabs.com/puppetlabs-release-el-{{ ansible_distribution_major_version }}.noarch.rpm dest=/tmp
+    when: ansible_os_family == 'RedHat'
+  - name: install puppetlabs el rpm
+    yum: name="/tmp/puppetlabs-release-el-{{ ansible_distribution_major_version }}.noarch.rpm" state=installed
+    when: ansible_os_family == 'RedHat'
+  - name: install puppet-server package
+    yum: name=puppet-server state=installed
+    when: ansible_os_family == 'RedHat'
+
+  - name: fetch puppetlabs debian dpkg
+    get_url: url=https://apt.puppetlabs.com/puppetlabs-release-{{ ansible_distribution_release }}.deb dest=/tmp
+    when: ansible_os_family == 'Debian'
+  - name: install puppetlabs debian dpkg
+    apt: deb="/tmp/puppetlabs-release-{{ ansible_distribution_release }}.deb" state=installed
+    when: ansible_os_family == 'Debian'
+  - name: install puppetmaster package
+    apt: name=puppetmaster state=installed update_cache=yes
+    when: ansible_os_family == 'Debian'
+  - name: ensure puppetmaster service is stopped
+    service: name=puppetmaster state=stopped
+    when: ansible_os_family == 'Debian'
+  - name: remove initial ssl directory
+    file: path=/var/lib/puppet/ssl state=absent
+    when: ansible_os_family == 'Debian'
+
+  - command: puppet config set server {{ ansible_hostname }} --section main
+  - command: puppet config set certname {{ ansible_hostname }} --section main
+  - command: puppet config set dns_alt_names {{ ansible_hostname }} --section main
+  - command: puppet config set environment puppet --section main
+  - command: puppet master --verbose
+  - command: sleep 10
+  - command: puppet agent -t
+  - command: pkill -f 'puppet master --verbose'
+
+  - name: install git on el
+    yum: name=git state=installed
+    when: ansible_os_family == 'RedHat'
+  - name: install git on Debian
+    apt: name=git state=installed
+    when: ansible_os_family == 'Debian'
+
+  - name: install zack-r10k module
+    command: puppet module install zack-r10k
+
+  - name: install rubygems where it is not automatically
+    command: puppet apply -v -e 'include ruby'
+    when: ansible_os_family == 'Debian'
+
+  - command: gem install r10k
+
+  - command: 'puppet apply --verbose -e ''class { "r10k": version => "installed", sources => { "puppet" => { "remote" => "https://github.com/eshamow/control.git", "basedir" => "/etc/puppet/environments", "prefix" => false, } }, purgedirs => ["/etc/puppet/environments"], install_options => "-debug", manage_modulepath => false, manage_ruby_dependency => ignore, }'''
+  - git: repo=https://github.com/eshamow/control.git
+         dest=/etc/puppet/control
+  - command: 'git checkout --track origin/puppet'
+    args:
+      chdir: /etc/puppet/control
+  - command: '/usr/local/bin/r10k deploy environment -pv'
+    args:
+      chdir: /etc/puppet/control
+  - command: 'puppet apply --modulepath /etc/puppet/environments/puppet/modules --verbose -e "class {''puppetmaster'': master => {{ ansible_hostname }}, control_repo => ''https://github.com/eshamow/control.git'' }"'

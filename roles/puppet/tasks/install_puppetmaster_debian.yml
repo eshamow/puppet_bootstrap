@@ -1,0 +1,12 @@
+---
+
+  - name: fetch puppetlabs debian dpkg
+    get_url: url=https://apt.puppetlabs.com/puppetlabs-release-{{ ansible_distribution_release }}.deb dest=/tmp
+  - name: install puppetlabs debian dpkg
+    apt: deb="/tmp/puppetlabs-release-{{ ansible_distribution_release }}.deb" state=installed
+  - name: install puppetmaster package
+    apt: name=puppetmaster state=installed update_cache=yes
+  - name: ensure puppetmaster service is stopped
+    service: name=puppetmaster state=stopped
+  - name: remove initial ssl directory
+    file: path=/var/lib/puppet/ssl state=absent
