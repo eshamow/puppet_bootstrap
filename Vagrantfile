@@ -9,34 +9,124 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
+  config.vm.provider "vmware_fusion" do |v|
+    v.vmx["memsize"] = "2048"
+  end
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.define "master" do |master|
     master.vm.box = "opscode_centos-6.5_chef-provisionerless"
-    master.vm.provision :hosts
+    master.vm.network "private_network", ip: "192.168.50.10"
+    master.cache.scope = :box
+    master.vm.provider "vmware_fusion" do |v|
+      v.vmx["memsize"] = "2048"
+    end
+  end
+  config.vm.define "ubu10" do |ubu10|
+    ubu10.vm.box = "opscode_ubuntu-10.04_chef-provisionerless"
+    ubu10.vm.network "private_network", ip: "192.168.50.20"
+    ubu10.vm.provision :hosts
+#    ubu10.vm.provision "shell",
+#      inline: "apt-get update && apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-precise.deb && dpkg -i ./puppetlabs-release-precise.deb && apt-get update && apt-get -y install puppet"
   end
   config.vm.define "ubu12" do |ubu12|
     ubu12.vm.box = "opscode_ubuntu-12.04_chef-provisionerless"
+    ubu12.vm.network "private_network", ip: "192.168.50.21"
     ubu12.vm.provision :hosts
+#    ubu12.vm.provision "shell",
+#      inline: "sudo rm -Rf /var/lib/apt/lists/* && apt-get update && apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-precise.deb && dpkg -i ./puppetlabs-release-precise.deb && apt-get update && apt-get -y install puppet"
   end
   config.vm.define "ubu14" do |ubu14|
     ubu14.vm.box = "opscode_ubuntu-14.04_chef-provisionerless"
+    ubu14.vm.network "private_network", ip: "192.168.50.22"
     ubu14.vm.provision :hosts
+#    ubu14.vm.provision "shell",
+#      inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-trusty.deb && dpkg -i ./puppetlabs-release-trusty.deb && apt-get update && apt-get -y install puppet"
   end
   config.vm.define "deb6" do |deb6|
     deb6.vm.box = "opscode_debian-6.0.10_chef-provisionerless"
+    deb6.vm.network "private_network", ip: "192.168.50.23"
     deb6.vm.provision :hosts
+    #deb6.vm.provision "shell",
+      #inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-squeeze.deb && dpkg -i ./puppetlabs-release-squeeze.deb && apt-get update && apt-get -y install puppet"
   end
   config.vm.define "deb7" do |deb7|
     deb7.vm.box = "opscode_debian-7.6_chef-provisionerless"
+    deb7.vm.network "private_network", ip: "192.168.50.24"
     deb7.vm.provision :hosts
+    #deb7.vm.provision "shell",
+      #inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb && dpkg -i ./puppetlabs-release-wheezy.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "el5" do |el5|
+    el5.vm.box = "opscode_centos-5.11_chef-provisionerless"
+    el5.vm.network "private_network", ip: "192.168.50.25"
+    el5.vm.provision :hosts
+    #el5.vm.provision "shell",
+    #  inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm && yum -y install puppet"
   end
   config.vm.define "el6" do |el6|
     el6.vm.box = "opscode_centos-6.5_chef-provisionerless"
+    el6.vm.network "private_network", ip: "192.168.50.26"
     el6.vm.provision :hosts
+#    el6.vm.provision "shell",
+#      inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm && yum -y install puppet"
   end
   config.vm.define "el7" do |el7|
     el7.vm.box = "opscode_centos-7.0_chef-provisionerless"
+    el7.vm.network "private_network", ip: "192.168.50.27"
     el7.vm.provision :hosts
+#    el7.vm.provision "shell",
+#      inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm && yum -y install puppet"
+  end
+
+  # 32 BIT
+  config.vm.define "ubu10_i386" do |ubu10_i386|
+    ubu10_i386.vm.box = "opscode_ubuntu-10.04-i386_chef-provisionerless"
+    ubu10_i386.vm.network "private_network", ip: "192.168.50.40"
+    ubu10_i386.vm.provision :hosts
+    ubu10_i386.vm.provision "shell",
+      inline: "apt-get update && apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-precise.deb && dpkg -i ./puppetlabs-release-precise.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "ubu12_i386" do |ubu12_i386|
+    ubu12_i386.vm.box = "opscode_ubuntu-12.04-i386_chef-provisionerless"
+    ubu12_i386.vm.network "private_network", ip: "192.168.50.41"
+    ubu12_i386.vm.provision :hosts
+    ubu12_i386.vm.provision "shell",
+      inline: "sudo rm -Rf /var/lib/apt/lists/* && apt-get update && apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-precise.deb && dpkg -i ./puppetlabs-release-precise.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "ubu14_i386" do |ubu14_i386|
+    ubu14_i386.vm.box = "opscode_ubuntu-14.04-i386_chef-provisionerless"
+    ubu14_i386.vm.network "private_network", ip: "192.168.50.42"
+    ubu14_i386.vm.provision :hosts
+    ubu14_i386.vm.provision "shell",
+      inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-trusty.deb && dpkg -i ./puppetlabs-release-trusty.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "deb6_i386" do |deb6_i386|
+    deb6_i386.vm.box = "opscode_debian-6.0.10-i386_chef-provisionerless"
+    deb6_i386.vm.network "private_network", ip: "192.168.50.43"
+    deb6_i386.vm.provision :hosts
+    deb6_i386.vm.provision "shell",
+      inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-squeeze.deb && dpkg -i ./puppetlabs-release-squeeze.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "deb7_i386" do |deb7_i386|
+    deb7_i386.vm.box = "opscode_debian-7.6-i386_chef-provisionerless"
+    deb7_i386.vm.network "private_network", ip: "192.168.50.44"
+    deb7_i386.vm.provision :hosts
+    deb7_i386.vm.provision "shell",
+      inline: "apt-get install -y curl && curl -O https://apt.puppetlabs.com/puppetlabs-release-wheezy.deb && dpkg -i ./puppetlabs-release-wheezy.deb && apt-get update && apt-get -y install puppet"
+  end
+  config.vm.define "el5_i386" do |el5_i386|
+    el5_i386.vm.box = "opscode_centos-5.11-i386_chef-provisionerless"
+    el5_i386.vm.network "private_network", ip: "192.168.50.45"
+    el5_i386.vm.provision :hosts
+    el5_i386.vm.provision "shell",
+      inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm && yum -y install puppet"
+  end
+  config.vm.define "el6_i386" do |el6_i386|
+    el6_i386.vm.box = "opscode_centos-6.5-i386_chef-provisionerless"
+    el6_i386.vm.network "private_network", ip: "192.168.50.46"
+    el6_i386.vm.provision :hosts
+    el6_i386.vm.provision "shell",
+      inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm && yum -y install puppet"
   end
 
 
@@ -52,7 +142,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "private_network", ip: "192.168.50.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -69,20 +159,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  config.vm.provider "vmware_fusion" do |v|
-    v.vmx["memsize"] = "2048"
-  end
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
+  #config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
   #   vb.gui = true
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
-  vb.customize ["modifyvm", :id, "--memory", "2048"]
-  end
+  #vb.customize ["modifyvm", :id, "--memory", "2048"]
+  #end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
