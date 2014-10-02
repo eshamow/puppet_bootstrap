@@ -1,0 +1,7 @@
+---
+
+- name: apply puppetmaster configuration
+  hosts: masters
+  sudo: yes
+  roles:
+    - puppet

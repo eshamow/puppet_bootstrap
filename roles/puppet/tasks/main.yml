@@ -1,0 +1,12 @@
+---
+- include: install_puppetmaster_debian.yml
+  when: ansible_os_family == 'Debian'
+- include: install_puppetmaster_redhat.yml
+  when: ansible_os_family == 'RedHat'
+- include: config_puppetmaster.yml
+- include: install_git_debian.yml
+  when: ansible_os_family == 'Debian'
+- include: install_git_redhat.yml
+  when: ansible_os_family == 'RedHat'
+- include: install_and_configure_r10k.yml
+- include: install_and_configure_master.yml
