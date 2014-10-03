@@ -9,4 +9,4 @@
 
   - command: gem install r10k
 
-  - command: 'puppet apply --verbose -e ''class { "r10k": version => "installed", sources => { "puppet" => { "remote" => "https://github.com/eshamow/control.git", "basedir" => "/etc/puppet/environments", "prefix" => false, } }, purgedirs => ["/etc/puppet/environments"], install_options => "-debug", manage_modulepath => false, manage_ruby_dependency => ignore, }'''
+  - command: 'puppet apply --verbose -e ''class { "r10k": version => "installed", sources => { "puppet" => { "remote" => "git@github.com:eshamow/control.git", "basedir" => "/etc/puppet/environments", "prefix" => false, } }, purgedirs => ["/etc/puppet/environments"], install_options => "-debug", manage_modulepath => false, manage_ruby_dependency => ignore, }'''

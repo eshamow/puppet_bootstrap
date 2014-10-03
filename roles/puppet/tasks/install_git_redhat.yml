@@ -2,3 +2,5 @@
 
   - name: install git on el
     yum: name=git state=installed
+  - name: install python selinux bindings for ansible-vault
+    yum: name=libselinux-python state=installed

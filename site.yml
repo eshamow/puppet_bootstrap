@@ -2,6 +2,8 @@
 
 - name: apply puppetmaster configuration
   hosts: masters
+  vars_files:
+   - ./roles/puppet/vars/git_key.yml
   sudo: yes
   roles:
     - puppet
