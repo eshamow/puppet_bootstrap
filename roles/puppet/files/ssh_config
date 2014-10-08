@@ -1,0 +1,5 @@
+Host github-control-repo
+  HostName github.com
+  User git
+  StrictHostKeyChecking no
+  IdentityFile /root/.ssh/github-control.key
