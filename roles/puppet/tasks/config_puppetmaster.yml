@@ -1,8 +1,8 @@
 ---
 
-  - command: puppet config set server {{ ansible_hostname }} --section main
-  - command: puppet config set certname {{ ansible_hostname }} --section main
-  - command: puppet config set dns_alt_names {{ ansible_hostname }} --section main
+  - command: puppet config set server {{ certname }} --section main
+  - command: puppet config set certname {{ certname }} --section main
+  - command: puppet config set dns_alt_names {{ dns_alt_names }} --section main
   - command: puppet config set environment puppet --section main
   - command: puppet master --verbose
   - command: sleep 10

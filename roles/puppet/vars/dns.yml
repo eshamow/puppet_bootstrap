@@ -1,0 +1,4 @@
+---
+
+certname: <hostname>
+dns_alt_names: "<comma-separated hostnames>,{{ ansible_hostname }}"

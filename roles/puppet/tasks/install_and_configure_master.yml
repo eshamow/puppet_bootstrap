@@ -2,9 +2,9 @@
 
   - file: path='/root/.ssh' state=directory mode=0700
   - name: private git deploy key
-    template: src=github-control.key dest='/root/.ssh/github-control.key' mode=0600
-  - copy: src=ssh_config dest='/root/.ssh/config' owner=root group=root mode=0600
-  - command: 'git clone ssh://git@github-control-repo/eshamow/control.git'
+    template: src=git-control.key dest='/root/.ssh/git-control.key' mode=0600
+  - template: src=ssh_config dest='/root/.ssh/config' owner=root group=root mode=0600
+  - command: "git clone ssh://git@git-control-repo/{{ repo_path }} control"
     args:
       chdir: /etc/puppet
   - command: 'git checkout --track origin/puppet'
@@ -13,4 +13,4 @@
   - shell: 'PATH=$PATH:/usr/local/bin r10k deploy environment -pv'
     args:
       chdir: /etc/puppet/control
-  - command: 'puppet apply --modulepath /etc/puppet/environments/puppet/modules --verbose -e "class {''puppetmaster'': master => {{ ansible_hostname }}, control_repo => ''git@github-control-repo:eshamow/control.git'' }"'
+  - command: 'puppet apply --modulepath /etc/puppet/environments/puppet/modules --verbose -e "class {''puppetmaster'': master => ''{{ certname }}'', dns_alt_names => ''{{ dns_alt_names }}'', control_repo => ''git@git-control-repo:{{ repo_path }}'' }"'

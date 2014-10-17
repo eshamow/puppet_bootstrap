@@ -1,0 +1,5 @@
+Host git-control-repo
+  HostName {{ git_server }}
+  User git
+  StrictHostKeyChecking no
+  IdentityFile /root/.ssh/git-control.key

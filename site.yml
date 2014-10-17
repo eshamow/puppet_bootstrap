@@ -4,6 +4,8 @@
   hosts: masters
   vars_files:
    - ./roles/puppet/vars/git_key.yml
+   - ./roles/puppet/vars/git_repo.yml
+   - ./roles/puppet/vars/dns.yml
   sudo: yes
   roles:
     - puppet
