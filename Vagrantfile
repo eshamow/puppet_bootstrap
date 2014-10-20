@@ -72,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
   config.vm.define "el7" do |el7|
     el7.vm.box = "opscode_centos-7.0_chef-provisionerless"
-    el7.vm.network "private_network", ip: "192.168.50.27"
+    el7.vm.network "private_network", ip: "192.168.50.28"
     el7.vm.provision :hosts
 #    el7.vm.provision "shell",
 #      inline: "rpm -ivh http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm && yum -y install puppet"
